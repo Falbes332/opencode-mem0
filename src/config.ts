@@ -2,16 +2,16 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { homedir } from "node:os";
 import { stripJsoncComments } from "./services/jsonc.js";
-import { loadCredentials } from "./services/auth.js";
 
 const CONFIG_DIR = join(homedir(), ".config", "opencode");
 const CONFIG_FILES = [
-  join(CONFIG_DIR, "supermemory.jsonc"),
-  join(CONFIG_DIR, "supermemory.json"),
+  join(CONFIG_DIR, "mem0.jsonc"),
+  join(CONFIG_DIR, "mem0.json"),
 ];
 
 interface SupermemoryConfig {
   apiKey?: string;
+  baseUrl?: string;
   similarityThreshold?: number;
   maxMemories?: number;
   maxProjectMemories?: number;
@@ -44,7 +44,7 @@ const DEFAULT_KEYWORD_PATTERNS = [
   "always\\s+remember",
 ];
 
-const DEFAULTS: Required<Omit<SupermemoryConfig, "apiKey" | "userContainerTag" | "projectContainerTag">> = {
+const DEFAULTS: Required<Omit<SupermemoryConfig, "apiKey" | "baseUrl" | "userContainerTag" | "projectContainerTag">> = {
   similarityThreshold: 0.6,
   maxMemories: 5,
   maxProjectMemories: 10,
@@ -91,13 +91,16 @@ function loadConfig(): SupermemoryConfig {
 const fileConfig = loadConfig();
 
 function getApiKey(): string | undefined {
-  // Priority: env var > config file > OAuth credentials
-  if (process.env.SUPERMEMORY_API_KEY) return process.env.SUPERMEMORY_API_KEY;
+  // Priority: env var > config file
+  if (process.env.MEM0_API_KEY) return process.env.MEM0_API_KEY;
   if (fileConfig.apiKey) return fileConfig.apiKey;
-  return loadCredentials()?.apiKey;
+  return undefined;
 }
 
 export const SUPERMEMORY_API_KEY = getApiKey();
+
+export const MEM0_BASE_URL =
+  process.env.MEM0_BASE_URL ?? fileConfig.baseUrl ?? "http://localhost:8000";
 
 export const CONFIG = {
   similarityThreshold: fileConfig.similarityThreshold ?? DEFAULTS.similarityThreshold,
@@ -117,5 +120,5 @@ export const CONFIG = {
 };
 
 export function isConfigured(): boolean {
-  return !!SUPERMEMORY_API_KEY;
+  return true;
 }

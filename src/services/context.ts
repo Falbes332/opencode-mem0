@@ -1,5 +1,13 @@
-import type { ProfileResponse } from "supermemory/resources";
 import { CONFIG } from "../config.js";
+
+interface ProfileData {
+  static: unknown[];
+  dynamic: unknown[];
+}
+
+interface ProfileResponseMinimal {
+  profile?: ProfileData | null;
+}
 
 interface MemoryResultMinimal {
   similarity?: number;
@@ -22,11 +30,11 @@ function extractFactText(fact: unknown): string {
 }
 
 export function formatContextForPrompt(
-  profile: ProfileResponse | null,
+  profile: ProfileResponseMinimal | null,
   userMemories: MemoriesResponseMinimal,
   projectMemories: MemoriesResponseMinimal
 ): string {
-  const parts: string[] = ["[SUPERMEMORY]"];
+  const parts: string[] = ["[mem0]"];
 
   if (CONFIG.injectProfile && profile?.profile) {
     const { static: staticFacts, dynamic: dynamicFacts } = profile.profile;

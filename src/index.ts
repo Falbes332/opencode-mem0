@@ -18,7 +18,7 @@ const INLINE_CODE_PATTERN = /`[^`]+`/g;
 const MEMORY_KEYWORD_PATTERN = new RegExp(`\\b(${CONFIG.keywordPatterns.join("|")})\\b`, "i");
 
 const MEMORY_NUDGE_MESSAGE = `[MEMORY TRIGGER DETECTED]
-The user wants you to remember something. You MUST use the \`supermemory\` tool with \`mode: "add"\` to save this information.
+The user wants you to remember something. You MUST use the \`mem0\` tool with \`mode: "add"\` to save this information.
 
 Extract the key information the user wants remembered and save it as a concise, searchable memory.
 - Use \`scope: "project"\` for project-specific preferences (e.g., "run lint with tests")
@@ -43,7 +43,7 @@ export const SupermemoryPlugin: Plugin = async (ctx: PluginInput) => {
   log("Plugin init", { directory, tags, configured: isConfigured() });
 
   if (!isConfigured()) {
-    log("Plugin disabled - SUPERMEMORY_API_KEY not set");
+    log("Plugin disabled - MEM0_BASE_URL not configured");
   }
 
   // Fetch model limits once at plugin init
@@ -181,9 +181,9 @@ export const SupermemoryPlugin: Plugin = async (ctx: PluginInput) => {
     },
 
     tool: {
-      supermemory: tool({
+      mem0: tool({
         description:
-          "Manage and query the Supermemory persistent memory system. Use 'search' to find relevant memories, 'add' to store new knowledge, 'profile' to view user profile, 'list' to see recent memories, 'forget' to remove a memory.",
+          "Manage and query the mem0 persistent memory system. Use 'search' to find relevant memories, 'add' to store new knowledge, 'profile' to view user profile, 'list' to see recent memories, 'forget' to remove a memory.",
         args: {
           mode: tool.schema
             .enum(["add", "search", "profile", "list", "forget", "help"])
@@ -217,7 +217,7 @@ export const SupermemoryPlugin: Plugin = async (ctx: PluginInput) => {
             return JSON.stringify({
               success: false,
               error:
-                "SUPERMEMORY_API_KEY not set. Set it in your environment to use Supermemory.",
+                "mem0 is not configured. Set MEM0_BASE_URL in your environment (default: http://localhost:8000).",
             });
           }
 
@@ -380,7 +380,7 @@ export const SupermemoryPlugin: Plugin = async (ctx: PluginInput) => {
                   count: combined.length,
                   results: combined.slice(0, args.limit || 10).map((r) => ({
                     id: r.id,
-                    content: r.memory || r.chunk,
+                    content: r.memory || "",
                     similarity: Math.round((r.similarity ?? 0) * 100),
                     scope: r.scope,
                   })),
