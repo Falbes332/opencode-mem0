@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  mem0:
+    image: mem0ai/mem0:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - mem0_data:/app/data
+    restart: unless-stopped
+
+volumes:
+  mem0_data:

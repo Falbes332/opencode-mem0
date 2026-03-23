@@ -58,7 +58,7 @@ export interface CompactionOptions {
 function createCompactionPrompt(projectMemories: string[]): string {
   const memoriesSection = projectMemories.length > 0 
     ? `
-## Project Knowledge (from Supermemory)
+## Project Knowledge (from mem0)
 The following project-specific knowledge should be preserved and referenced in the summary:
 ${projectMemories.map(m => `- ${m}`).join('\n')}
 `
@@ -368,7 +368,7 @@ export function createCompactionHook(
     await ctx.client.tui.showToast({
       body: {
         title: "Preemptive Compaction",
-        message: `Context at ${(usageRatio * 100).toFixed(0)}% - compacting with Supermemory context...`,
+        message: `Context at ${(usageRatio * 100).toFixed(0)}% - compacting with mem0 context...`,
         variant: "warning",
         duration: 3000,
       },
@@ -397,7 +397,7 @@ export function createCompactionHook(
       await ctx.client.tui.showToast({
         body: {
           title: "Compaction Complete",
-          message: "Session compacted with Supermemory context. Resuming...",
+          message: "Session compacted with mem0 context. Resuming...",
           variant: "success",
           duration: 2000,
         },

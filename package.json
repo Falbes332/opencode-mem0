@@ -1,12 +1,12 @@
 {
-  "name": "opencode-supermemory",
-  "version": "2.0.1",
-  "description": "OpenCode plugin that gives coding agents persistent memory using Supermemory",
+  "name": "opencode-mem0",
+  "version": "1.0.0",
+  "description": "OpenCode plugin that gives coding agents persistent memory using mem0 self-hosted Docker backend",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "opencode-supermemory": "./dist/cli.js"
+    "opencode-mem0": "./dist/cli.js"
   },
   "scripts": {
     "build": "bun build ./src/index.ts --outdir ./dist --target node && bun build ./src/cli.ts --outfile ./dist/cli.js --target node && tsc --emitDeclarationOnly",
@@ -16,20 +16,19 @@
   "keywords": [
     "opencode",
     "plugin",
-    "supermemory",
+    "mem0",
     "memory",
     "ai",
     "coding-agent"
   ],
-  "author": "Supermemory",
+  "author": "Falbes332",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/supermemoryai/opencode-supermemory"
+    "url": "https://github.com/Falbes332/opencode-mem0"
   },
   "dependencies": {
-    "@opencode-ai/plugin": "^1.0.162",
-    "supermemory": "^4.0.0"
+    "@opencode-ai/plugin": "^1.0.162"
   },
   "devDependencies": {
     "@types/bun": "latest",
