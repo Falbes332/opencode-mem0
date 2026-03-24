@@ -69,14 +69,17 @@ export class Mem0Client {
   async searchMemories(query: string, userId: string) {
     log("searchMemories: start", { userId });
     try {
-      const params = new URLSearchParams({
-        user_id: userId,
+      const body = {
         query,
-        limit: String(CONFIG.maxMemories),
-      });
+        user_id: userId,
+        limit: CONFIG.maxMemories,
+        threshold: CONFIG.similarityThreshold,
+      };
       const response = await withTimeout(
-        fetch(`${this.baseUrl}/v2/memories/search?${params}`, {
+        fetch(`${this.baseUrl}/search`, {
+          method: "POST",
           headers: buildHeaders(),
+          body: JSON.stringify(body),
         }),
         TIMEOUT_MS
       );
@@ -91,10 +94,6 @@ export class Mem0Client {
         : (data.results ?? []);
 
       const results = memories
-        .filter((m) => {
-          const score = m.score ?? 1;
-          return score >= CONFIG.similarityThreshold;
-        })
         .map((m) => ({
           id: m.id,
           memory: m.memory,
@@ -118,7 +117,7 @@ export class Mem0Client {
         limit: String(CONFIG.maxProfileItems),
       });
       const response = await withTimeout(
-        fetch(`${this.baseUrl}/v2/memories?${params}`, {
+        fetch(`${this.baseUrl}/memories?${params}`, {
           headers: buildHeaders(),
         }),
         TIMEOUT_MS
@@ -164,7 +163,7 @@ export class Mem0Client {
       };
 
       const response = await withTimeout(
-        fetch(`${this.baseUrl}/v2/memories`, {
+        fetch(`${this.baseUrl}/memories`, {
           method: "POST",
           headers: buildHeaders(),
           body: JSON.stringify(body),
@@ -191,7 +190,7 @@ export class Mem0Client {
     log("deleteMemory: start", { memoryId });
     try {
       const response = await withTimeout(
-        fetch(`${this.baseUrl}/v2/memories/${memoryId}`, {
+        fetch(`${this.baseUrl}/memories/${memoryId}`, {
           method: "DELETE",
           headers: buildHeaders(),
         }),
@@ -219,7 +218,7 @@ export class Mem0Client {
         limit: String(limit),
       });
       const response = await withTimeout(
-        fetch(`${this.baseUrl}/v2/memories?${params}`, {
+        fetch(`${this.baseUrl}/memories?${params}`, {
           headers: buildHeaders(),
         }),
         TIMEOUT_MS

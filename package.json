@@ -1,12 +1,12 @@
 {
-  "name": "opencode-mem0",
-  "version": "1.0.0",
+  "name": "@fables092/opencode-mem0",
+  "version": "1.0.1",
   "description": "OpenCode plugin that gives coding agents persistent memory using mem0 self-hosted Docker backend",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "opencode-mem0": "./dist/cli.js"
+    "opencode-mem0": "dist/cli.js"
   },
   "scripts": {
     "build": "bun build ./src/index.ts --outdir ./dist --target node && bun build ./src/cli.ts --outfile ./dist/cli.js --target node && tsc --emitDeclarationOnly",
@@ -25,7 +25,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Falbes332/opencode-mem0"
+    "url": "git+https://github.com/Falbes332/opencode-mem0.git"
   },
   "dependencies": {
     "@opencode-ai/plugin": "^1.0.162"

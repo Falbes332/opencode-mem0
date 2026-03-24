@@ -1,41 +1,44 @@
 # opencode-mem0 — mem0 self-hosted memory plugin for OpenCode
 
-OpenCode plugin for persistent memory using [mem0](https://mem0.ai) self-hosted Docker backend.
+OpenCode plugin for persistent memory using [mem0](https://mem0.ai) self-hosted backend.
 
 Your agent remembers what you tell it — across sessions, across projects — without sending data to any third-party cloud service.
 
 ## Quick Start
 
-### 1. Start mem0 Docker backend
+### 1. Start mem0 backend
 
-```bash
-docker compose up -d
-```
+Run the mem0 REST API server. By default the plugin expects it at `http://localhost:8000`, but you can point it anywhere (including a remote host).
 
-This starts the mem0 REST API at `http://localhost:8000`.  
-You need an `OPENAI_API_KEY` set in your environment (mem0 uses it for embeddings).
+> If using the official Docker image:
+>
+> ```bash
+> docker compose up -d
+> ```
+>
+> This requires `OPENAI_API_KEY` in your environment (mem0 uses it for embeddings).
 
 ### 2. Set environment variables
 
 ```bash
-# Required: point the plugin to your mem0 instance (default shown)
-export MEM0_BASE_URL=http://localhost:8000
+# Required: point the plugin to your mem0 instance
+export MEM0_BASE_URL=http://localhost:8000   # or e.g. http://10.10.21.74:8888
 
-# Optional: set an API key if you configured mem0 with authentication
+# Optional: API key if your mem0 instance requires authentication
 export MEM0_API_KEY=your-key
 ```
 
 ### 3. Install the plugin
 
 ```bash
-bunx opencode-mem0@latest install
+bunx @fables092/opencode-mem0@latest install
 ```
 
-Or add manually to `~/.config/opencode/opencode.jsonc`:
+Or add manually to `~/.config/opencode/opencode.json`:
 
-```jsonc
+```json
 {
-  "plugin": ["opencode-mem0"]
+  "plugin": ["@fables092/opencode-mem0"]
 }
 ```
 
@@ -115,7 +118,7 @@ On first message of a session, the agent receives (invisible to user):
 
 Say "remember", "save this", "don't forget" etc. and the agent auto-saves to memory.
 
-```
+```text
 You: "Remember that this project uses bun"
 Agent: [saves to project memory]
 ```
@@ -134,7 +137,7 @@ This preserves conversation context across compaction events.
 
 ### Privacy
 
-```
+```text
 API key is <private>sk-abc123</private>
 ```
 
@@ -157,9 +160,9 @@ bun run typecheck
 
 Local install:
 
-```jsonc
+```json
 {
-  "plugin": ["file:///path/to/opencode-mem0"],
+  "plugin": ["file:///path/to/opencode-mem0"]
 }
 ```
 
